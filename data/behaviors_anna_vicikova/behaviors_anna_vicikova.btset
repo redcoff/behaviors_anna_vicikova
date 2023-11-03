@@ -1,0 +1,10 @@
+{
+  "name": "behaviors_anna_vicikova",
+  "trees": [
+    "behavior1.bt"
+  ],
+  "initScripts": [],
+  "parameters": {},
+  "capabilities": {},
+  "dynamicTargets": []
+}
