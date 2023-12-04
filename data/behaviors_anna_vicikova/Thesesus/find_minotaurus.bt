@@ -32,45 +32,58 @@
         },
         {
           "name": "<unnamed>",
-          "id": "a970c46b-e20a-4536-9187-76eaec15b4b8",
-          "type": "selector",
+          "id": "bb1139a4-8e79-4dba-90b0-848ea83d12e1",
+          "type": "sequence",
           "subtrees": [
             {
-              "name": "Find Path",
-              "id": "fb426244-ac50-41c6-aa53-522d47531d9d",
-              "type": "sequence",
+              "name": "<unnamed>",
+              "id": "a970c46b-e20a-4536-9187-76eaec15b4b8",
+              "type": "selector",
               "subtrees": [
                 {
-                  "name": "Position of group",
-                  "id": "6b96739d-9ac2-4128-a4c0-3d8a2fc996e6",
-                  "type": "scriptAction",
-                  "script": [
-                    "loc.position = self:GetPosition()"
+                  "name": "Find Path",
+                  "id": "fb426244-ac50-41c6-aa53-522d47531d9d",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Position of group",
+                      "id": "6b96739d-9ac2-4128-a4c0-3d8a2fc996e6",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.position = self:GetPosition()"
+                      ]
+                    },
+                    {
+                      "name": "Get path",
+                      "id": "8385ded4-55fa-452c-a316-420eb05f5a2e",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.pathQuery = FindPath(loc.position,loc.target:GetPosition())\t"
+                      ]
+                    },
+                    {
+                      "name": "Wait",
+                      "id": "832ead9d-93ad-4a02-a2d1-6ac20bbc5e9a",
+                      "type": "waitUntil",
+                      "condition": [
+                        "local queryIsReady = loc.pathQuery:IsReady()",
+                        "",
+                        "if (queryIsReady) then",
+                        "    loc.path = loc.pathQuery:Value()",
+                        "    loc.pathQuery = nil",
+                        "end",
+                        "return queryIsReady"
+                      ]
+                    }
                   ]
                 },
                 {
-                  "name": "Get path",
-                  "id": "8385ded4-55fa-452c-a316-420eb05f5a2e",
-                  "type": "scriptAction",
-                  "script": [
-                    "loc.pathQuery = FindPath(loc.position,loc.target:GetPosition())\t"
-                  ]
-                },
-                {
-                  "name": "Wait",
-                  "id": "832ead9d-93ad-4a02-a2d1-6ac20bbc5e9a",
-                  "type": "waitUntil",
-                  "condition": [
-                    "local queryIsReady = loc.pathQuery:IsReady()",
-                    "",
-                    "if (queryIsReady) then",
-                    "    loc.path = loc.pathQuery:Value()",
-                    "    loc.pathQuery = nil",
-                    "end",
-                    "return queryIsReady"
-                  ]
+                  "name": "Succeed",
+                  "id": "2e025970-9edb-4e8d-b2ce-3ab284190479",
+                  "type": "success"
                 }
-              ]
+              ],
+              "active": true
             },
             {
               "name": "Go to target",
@@ -94,12 +107,60 @@
                   ]
                 },
                 {
-                  "name": "Move",
-                  "id": "7ae9ab3d-22ed-403a-9b8b-29b9c5879653",
-                  "type": "move",
-                  "position": [
-                    "return loc.target:GetPosition()"
-                  ]
+                  "name": "<unnamed>",
+                  "id": "7d92268c-d20f-4741-ba50-900f3830c90f",
+                  "type": "parallel",
+                  "subtrees": [
+                    {
+                      "name": "Find angle to slow down",
+                      "id": "0722c8fe-8741-43b3-afe9-126c5626a9e3",
+                      "type": "scriptAction",
+                      "script": [
+                        "local dir = loc.path:DirectionAlongPath(10)",
+                        "local turn = MathExt.AngleDiff(dir, self:GetHeading())",
+                        "if math.abs(turn) > 70 then",
+                        "    loc.slowDown = true",
+                        "else ",
+                        "    loc.slowDown = false",
+                        "end"
+                      ]
+                    },
+                    {
+                      "name": "<unnamed>",
+                      "id": "f2480c12-e6fd-464d-9f45-1db1fd9abf7d",
+                      "type": "selector",
+                      "subtrees": [
+                        {
+                          "name": "Move",
+                          "id": "7ae9ab3d-22ed-403a-9b8b-29b9c5879653",
+                          "type": "move",
+                          "position": [
+                            "return loc.target:GetPosition()"
+                          ]
+                        },
+                        {
+                          "name": "<unnamed>",
+                          "id": "778e6762-d5c1-41ff-9cd0-b71059160068",
+                          "type": "wait",
+                          "decorators": [
+                            {
+                              "id": "17f8e090-6850-456b-817b-2170d28cfede",
+                              "type": "scriptCondition",
+                              "name": "<unnamed>",
+                              "script": [
+                                "return loc.slowDown"
+                              ]
+                            }
+                          ],
+                          "time": [
+                            "1"
+                          ]
+                        }
+                      ],
+                      "active": true
+                    }
+                  ],
+                  "waitForAll": true
                 }
               ],
               "decorators": [
@@ -114,12 +175,40 @@
               ]
             },
             {
-              "name": "Succeed",
-              "id": "2e025970-9edb-4e8d-b2ce-3ab284190479",
-              "type": "success"
+              "name": "Fire at the closest enemy",
+              "id": "e743bbf2-8f82-413b-b5ff-0ca3516cbec5",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Aim",
+                  "id": "64ddf5df-57f2-4bbc-98d9-8fa892965cf4",
+                  "type": "scriptAction",
+                  "script": [
+                    "return self:ReqHeadingAimAtEntity(loc.target)"
+                  ]
+                },
+                {
+                  "name": "Fire enemy",
+                  "id": "c9ae69b8-d72a-4043-a3dc-a8f5cfedba7c",
+                  "type": "fire",
+                  "rounds": [
+                    "10"
+                  ],
+                  "forced": false
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "aed8ed21-70f7-4ab4-b274-728f12fd6e62",
+                  "type": "scriptCondition",
+                  "name": "Is target close",
+                  "script": [
+                    "return self:GetPosition():Distance(loc.target:GetPosition()) < 20 "
+                  ]
+                }
+              ]
             }
-          ],
-          "active": true
+          ]
         }
       ]
     },
@@ -164,57 +253,6 @@
   ],
   "unlinked-trees": [
     {
-      "name": "Fire at the closest enemy",
-      "id": "e743bbf2-8f82-413b-b5ff-0ca3516cbec5",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "Aim",
-          "id": "64ddf5df-57f2-4bbc-98d9-8fa892965cf4",
-          "type": "scriptAction",
-          "script": [
-            "return self:ReqHeadingAimAtEntity(loc.target)"
-          ]
-        },
-        {
-          "name": "Fire enemy",
-          "id": "c9ae69b8-d72a-4043-a3dc-a8f5cfedba7c",
-          "type": "fire",
-          "rounds": [
-            "10"
-          ],
-          "forced": false
-        }
-      ],
-      "decorators": [
-        {
-          "id": "aed8ed21-70f7-4ab4-b274-728f12fd6e62",
-          "type": "scriptCondition",
-          "name": "Is target close",
-          "script": [
-            "return abs(self:GetEntity(0):GetPosition() - loc.target:GetPosition()) < 10 "
-          ]
-        }
-      ],
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "e743bbf2-8f82-413b-b5ff-0ca3516cbec5",
-            "position": "2437.5,645.5"
-          },
-          {
-            "id": "64ddf5df-57f2-4bbc-98d9-8fa892965cf4",
-            "position": "2362.5,795.5"
-          },
-          {
-            "id": "c9ae69b8-d72a-4043-a3dc-a8f5cfedba7c",
-            "position": "2575,795.5"
-          }
-        ],
-        "editorObjects": []
-      }
-    },
-    {
       "name": "<unnamed>",
       "id": "58531f71-90ac-43ae-b07b-f6e0cf2d1434",
       "type": "loopForever",
@@ -222,7 +260,58 @@
         "nodesInfo": [
           {
             "id": "58531f71-90ac-43ae-b07b-f6e0cf2d1434",
-            "position": "1562.5,470.5"
+            "position": "1237.5,300.500000000003"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "Follow Formation",
+      "id": "8ba86071-0122-4204-b6cf-a5edb9d86487",
+      "type": "followFormation",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "8ba86071-0122-4204-b6cf-a5edb9d86487",
+            "position": "1850,1313"
+          }
+        ],
+        "editorObjects": []
+      },
+      "boundaries": [
+        "return loc.path"
+      ]
+    },
+    {
+      "name": "Follow Entity",
+      "id": "bde2511a-78d9-475a-b16c-ca48a67423a1",
+      "type": "followEntity",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "bde2511a-78d9-475a-b16c-ca48a67423a1",
+            "position": "1837.5,1225.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "entity": [
+        "return loc.target"
+      ],
+      "distance": [
+        "return loc.position:Distance(loc.target:GetPosition())"
+      ]
+    },
+    {
+      "name": "Succeed",
+      "id": "839623f4-3df6-47ac-a1f8-7cc267dd5e45",
+      "type": "success",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "839623f4-3df6-47ac-a1f8-7cc267dd5e45",
+            "position": "1462.5,1188"
           }
         ],
         "editorObjects": []
@@ -233,65 +322,97 @@
     "nodesInfo": [
       {
         "id": "ac7c2c79-9847-4fa2-924a-fdcd3e819a5a",
-        "position": "1600,158",
+        "position": "1600,188.000000000003",
         "height": 66.400000000000034
       },
       {
         "id": "e931c5ed-15cb-4288-93d6-58a2578032b6",
-        "position": "1571,314.7"
+        "position": "1571,344.700000000003"
       },
       {
         "id": "3d8e8bf8-0d09-47ae-af55-7ce02e3188fc",
-        "position": "1283.5,477.2"
+        "position": "1283.5,507.200000000003"
+      },
+      {
+        "id": "bb1139a4-8e79-4dba-90b0-848ea83d12e1",
+        "position": "1962.5,438.000000000003"
       },
       {
         "id": "a970c46b-e20a-4536-9187-76eaec15b4b8",
-        "position": "2021,427.2"
+        "position": "1612.5,500.500000000003"
       },
       {
         "id": "fb426244-ac50-41c6-aa53-522d47531d9d",
-        "position": "1437.5,583"
+        "position": "1437.5,613.000000000003"
       },
       {
         "id": "6b96739d-9ac2-4128-a4c0-3d8a2fc996e6",
-        "position": "1136.2,764.8"
+        "position": "1136.2,794.800000000003"
       },
       {
         "id": "8385ded4-55fa-452c-a316-420eb05f5a2e",
-        "position": "1371.5,759.8"
+        "position": "1371.5,789.800000000003"
       },
       {
         "id": "832ead9d-93ad-4a02-a2d1-6ac20bbc5e9a",
-        "position": "1596.5,759.8"
-      },
-      {
-        "id": "a08cd6b6-d65e-4813-ae06-dd59785941f6",
-        "position": "1837.5,533"
-      },
-      {
-        "id": "466f1e94-bd66-46a8-80a8-37207043adff",
-        "position": "1675,908"
-      },
-      {
-        "id": "f90134fe-13e7-4cdd-a8cc-943cf20c092e",
-        "position": "1850,908"
-      },
-      {
-        "id": "7ae9ab3d-22ed-403a-9b8b-29b9c5879653",
-        "position": "2012.5,908"
+        "position": "1596.5,789.800000000003"
       },
       {
         "id": "2e025970-9edb-4e8d-b2ce-3ab284190479",
-        "position": "2133.5,502.2"
+        "position": "1637.5,613.000000000003"
+      },
+      {
+        "id": "a08cd6b6-d65e-4813-ae06-dd59785941f6",
+        "position": "1862.5,725.500000000003"
+      },
+      {
+        "id": "466f1e94-bd66-46a8-80a8-37207043adff",
+        "position": "1462.5,938.000000000003"
+      },
+      {
+        "id": "f90134fe-13e7-4cdd-a8cc-943cf20c092e",
+        "position": "1687.5,938.000000000003"
+      },
+      {
+        "id": "7d92268c-d20f-4741-ba50-900f3830c90f",
+        "position": "2062.5,938.000000000003"
+      },
+      {
+        "id": "0722c8fe-8741-43b3-afe9-126c5626a9e3",
+        "position": "1750,1075.5"
+      },
+      {
+        "id": "f2480c12-e6fd-464d-9f45-1db1fd9abf7d",
+        "position": "2200,1075.5"
+      },
+      {
+        "id": "7ae9ab3d-22ed-403a-9b8b-29b9c5879653",
+        "position": "2112.5,1213"
+      },
+      {
+        "id": "778e6762-d5c1-41ff-9cd0-b71059160068",
+        "position": "2325,1225.5"
+      },
+      {
+        "id": "e743bbf2-8f82-413b-b5ff-0ca3516cbec5",
+        "position": "2437.5,675.500000000003"
+      },
+      {
+        "id": "64ddf5df-57f2-4bbc-98d9-8fa892965cf4",
+        "position": "2362.5,825.500000000003"
+      },
+      {
+        "id": "c9ae69b8-d72a-4043-a3dc-a8f5cfedba7c",
+        "position": "2575,825.500000000003"
       },
       {
         "id": "58997908-101c-4104-8fc0-67eab79f7d8f",
-        "position": "1887.5,283"
+        "position": "1887.5,313.000000000003"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2608",
-    "gridPadding": "0,8.00000000000006"
+    "canvasSize": "3840,2638",
+    "gridPadding": "0,0.500000000002672"
   },
   "parameters": [],
   "locals": {
@@ -300,6 +421,7 @@
     "pathQuery": "return nil",
     "position": "return nil",
     "points": "return nil",
-    "angles": "return nil"
+    "angles": "return nil",
+    "slowDown": "return false"
   }
 }
