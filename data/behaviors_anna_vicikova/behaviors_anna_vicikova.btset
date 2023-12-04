@@ -1,7 +1,12 @@
 {
   "name": "behaviors_anna_vicikova",
   "trees": [
-    "behavior1.bt"
+    "individual\\fire_at_closest_enemy.bt",
+    "individual\\go_to_position.bt",
+    "individual\\stance_crouch.bt",
+    "individual\\stance_prone.bt",
+    "Thesesus\\find_minotaurus.bt",
+    "my_behavior.bt"
   ],
   "initScripts": [],
   "parameters": {},

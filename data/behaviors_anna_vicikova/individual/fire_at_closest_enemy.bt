@@ -1,0 +1,115 @@
+{
+  "name": "Fire at the closest enemy",
+  "id": "62068196-020d-48be-87e6-bfdcd79558f6",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Find enemy",
+      "id": "00a75a5d-fa34-4f75-b6ea-748fddae27f3",
+      "type": "scriptAction",
+      "script": [
+        "for i, entity in ipairs(",
+        "    GetEntitiesInArea(",
+        "        Circle(",
+        "            self:GetPosition(), ",
+        "            50",
+        "        ), ",
+        "        {",
+        "            enemyOf = self",
+        "        }",
+        "    )",
+        ") ",
+        "do",
+        "    loc.target = entity",
+        "    break",
+        "end"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "1ac1913e-cf3a-411f-99a2-6a6ca0e38f03",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Fire at the closest enemy",
+          "id": "ecdba081-a5a2-4acf-be01-0e8597dfc345",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Aim",
+              "id": "cd55a3af-aa41-4fd4-83f6-3457c8f3ae38",
+              "type": "scriptAction",
+              "script": [
+                "return self:ReqHeadingAimAtEntity(loc.target)"
+              ]
+            },
+            {
+              "name": "Fire enemy",
+              "id": "4e10ab32-a15d-49b1-adc4-cfdf9898df66",
+              "type": "fire",
+              "rounds": [
+                "10"
+              ],
+              "forced": false
+            }
+          ],
+          "decorators": [
+            {
+              "id": "991c5c6b-0a60-4182-8183-440e6e609fc1",
+              "type": "scriptCondition",
+              "name": "Have target",
+              "script": [
+                "return loc.target ~= nil"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Succeed",
+          "id": "37edb052-9b92-43a9-ac57-f7141ba94e48",
+          "type": "success"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "62068196-020d-48be-87e6-bfdcd79558f6",
+        "position": "1750,270.5"
+      },
+      {
+        "id": "00a75a5d-fa34-4f75-b6ea-748fddae27f3",
+        "position": "1462.5,433"
+      },
+      {
+        "id": "1ac1913e-cf3a-411f-99a2-6a6ca0e38f03",
+        "position": "2200,383"
+      },
+      {
+        "id": "ecdba081-a5a2-4acf-be01-0e8597dfc345",
+        "position": "2025,445.5"
+      },
+      {
+        "id": "cd55a3af-aa41-4fd4-83f6-3457c8f3ae38",
+        "position": "1950,595.5"
+      },
+      {
+        "id": "4e10ab32-a15d-49b1-adc4-cfdf9898df66",
+        "position": "2162.5,595.5"
+      },
+      {
+        "id": "37edb052-9b92-43a9-ac57-f7141ba94e48",
+        "position": "2312.5,458"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2408",
+    "gridPadding": "0,8.00000000000011"
+  },
+  "parameters": [],
+  "locals": {
+    "target": "return nil"
+  }
+}

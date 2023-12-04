@@ -1,17 +1,135 @@
 {
-  "name": "Wait Forever",
-  "id": "e6bdefd7-11b6-40fa-898c-9539d9b7be17",
-  "type": "waitForever",
+  "name": "<unnamed>",
+  "id": "3a6de1f6-63d3-430a-bbbd-986df5cc9de7",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "af58d52f-d2b9-4dd2-a6bc-adf8a8ef5e07",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Position of group",
+          "id": "2dff4980-f543-415c-938f-95d9c0c4f90b",
+          "type": "scriptAction",
+          "script": [
+            "loc.position = self:GetEntity(0):GetPosition()"
+          ]
+        },
+        {
+          "name": "Get path",
+          "id": "af56fdb5-46d5-41f3-abe6-38cdd76d09d2",
+          "type": "scriptAction",
+          "script": [
+            "loc.pathQuery = FindPath(loc.position,bb.position)\t"
+          ]
+        },
+        {
+          "name": "Wait",
+          "id": "19b573aa-4ad2-4fd5-ad3a-a224a0bc31d4",
+          "type": "waitUntil",
+          "condition": [
+            "local queryIsReady = loc.pathQuery:IsReady()",
+            "",
+            "if (queryIsReady) then",
+            "    loc.path = loc.pathQuery:Value()",
+            "    loc.pathQuery = nil",
+            "end",
+            "return queryIsReady"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "0ae236a5-fb35-4cab-9df3-fd602fcb933b",
+          "type": "loopForever",
+          "name": "<unnamed>"
+        }
+      ]
+    },
+    {
+      "name": "Debug",
+      "id": "4db03fa2-1420-4d78-aebf-df8e07be828d",
+      "type": "scriptAction",
+      "script": [
+        "local function PolylineOnSurface(points, r, g, b, a, offset)",
+        "            if offset == nil then offset = Vec3(0,0,3) end",
+        "\t\t\tfor i = 1, #points do",
+        "\t\t\t\tpoints[i] = GetSurfacePosition(points[i]) + offset",
+        "\t\t\tend",
+        "            for i = 1, #points-1 do",
+        "                DebugLine(points[i], points[i+1], 0, 0, 1, 1)",
+        "\t\t\tend            ",
+        "\t\tend",
+        "",
+        "local path = loc.path",
+        "",
+        "if (path == nil) then ",
+        "    return",
+        "end",
+        "",
+        "local offset = Vec3(0,0,0)",
+        "local segmentCount = path:GetSegmentCount()",
+        "local points = {}",
+        "for i = 0, segmentCount-1 do",
+        "    points[i+1] = path:GetSegmentStart(i)",
+        "end",
+        "points[#points+1] = path:GetSegmentEnd(segmentCount-1)",
+        "PolylineOnSurface(points,1, 0, 0, 1, offset)"
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Debug",
+      "id": "4961e734-ded9-4ee5-bac1-dcae6d22a19e",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "4961e734-ded9-4ee5-bac1-dcae6d22a19e",
+            "position": "1912.5,330.9"
+          }
+        ],
+        "editorObjects": []
+      }
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "e6bdefd7-11b6-40fa-898c-9539d9b7be17",
-        "position": "1819.2,339.2"
+        "id": "3a6de1f6-63d3-430a-bbbd-986df5cc9de7",
+        "position": "1612.5,193.4"
+      },
+      {
+        "id": "af58d52f-d2b9-4dd2-a6bc-adf8a8ef5e07",
+        "position": "1628.5,316.6"
+      },
+      {
+        "id": "2dff4980-f543-415c-938f-95d9c0c4f90b",
+        "position": "1327.2,498.4"
+      },
+      {
+        "id": "af56fdb5-46d5-41f3-abe6-38cdd76d09d2",
+        "position": "1562.5,493.4"
+      },
+      {
+        "id": "19b573aa-4ad2-4fd5-ad3a-a224a0bc31d4",
+        "position": "1787.5,493.4"
+      },
+      {
+        "id": "4db03fa2-1420-4d78-aebf-df8e07be828d",
+        "position": "2087.5,330.9"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2418.4",
+    "gridPadding": "0,5.9000000000002"
   },
   "parameters": [],
-  "locals": {}
+  "locals": {
+    "position": "return nil",
+    "pathQuery": "return nil",
+    "path": "return nil"
+  }
 }

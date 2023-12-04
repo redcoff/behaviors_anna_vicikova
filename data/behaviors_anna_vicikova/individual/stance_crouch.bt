@@ -1,0 +1,21 @@
+{
+  "name": "Set Crouch",
+  "id": "f21f8322-06fd-4dc2-b59a-53b92c0e4233",
+  "type": "setStance",
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "f21f8322-06fd-4dc2-b59a-53b92c0e4233",
+        "position": "1864.9,430.8"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2402.4",
+    "gridPadding": "0,2.40000000000009"
+  },
+  "stance": [
+    "return Stance.Crouched"
+  ],
+  "parameters": [],
+  "locals": {}
+}

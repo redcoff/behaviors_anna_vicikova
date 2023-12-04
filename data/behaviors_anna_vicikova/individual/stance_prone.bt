@@ -1,0 +1,20 @@
+{
+  "name": "Set Prone",
+  "id": "c44a5bbb-e67d-46cb-9765-7a20b86b6d8f",
+  "type": "setStance",
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "c44a5bbb-e67d-46cb-9765-7a20b86b6d8f",
+        "position": "1792.8,426.4"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "stance": [
+    "return Stance.Prone"
+  ],
+  "parameters": [],
+  "locals": {}
+}

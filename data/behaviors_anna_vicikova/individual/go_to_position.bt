@@ -1,0 +1,101 @@
+{
+  "name": "<unnamed>",
+  "id": "d87c097c-b829-4e03-b2ba-e99771057030",
+  "type": "selector",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "25091a96-2c68-4fdf-9fc3-ad5de705e7ef",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Set heading",
+          "id": "aceb770d-23a7-4d80-9fae-d9af6b2bde05",
+          "type": "scriptAction",
+          "script": [
+            "self:ReqHeadingFormationIfStationary()"
+          ]
+        },
+        {
+          "name": "<unnamed>",
+          "id": "d0c7c9a0-8a37-4dbd-958b-0846e28cb881",
+          "type": "reference",
+          "target": [
+            "behaviors_anna_vicikova",
+            "stance_crouch"
+          ],
+          "arguments": {}
+        },
+        {
+          "name": "<unnamed>",
+          "id": "580d10f1-5fb8-4749-810e-a0dafe1eab0c",
+          "type": "setEntitySpeedLimits",
+          "movementSpeed": [
+            "10"
+          ]
+        },
+        {
+          "name": "Move",
+          "id": "d2b59596-3496-4331-a84c-1b55d03b04ae",
+          "type": "move",
+          "decorators": [
+            {
+              "id": "7590d6c2-8cd3-42a1-a829-5996ee88d75c",
+              "type": "scriptCondition",
+              "name": "<unnamed>",
+              "script": [
+                "return bb.goalPosition ~= nil"
+              ]
+            }
+          ],
+          "position": [
+            "return bb.goalPosition"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Succeed",
+      "id": "4e17c8c3-c7b8-4327-bad6-7ae8d4a160fa",
+      "type": "success"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "d87c097c-b829-4e03-b2ba-e99771057030",
+        "position": "1762.5,312.7"
+      },
+      {
+        "id": "25091a96-2c68-4fdf-9fc3-ad5de705e7ef",
+        "position": "1562.5,537.7"
+      },
+      {
+        "id": "aceb770d-23a7-4d80-9fae-d9af6b2bde05",
+        "position": "1362.5,662.7"
+      },
+      {
+        "id": "d0c7c9a0-8a37-4dbd-958b-0846e28cb881",
+        "position": "1525,662.7"
+      },
+      {
+        "id": "580d10f1-5fb8-4749-810e-a0dafe1eab0c",
+        "position": "1687.5,662.7"
+      },
+      {
+        "id": "d2b59596-3496-4331-a84c-1b55d03b04ae",
+        "position": "1900,662.7"
+      },
+      {
+        "id": "4e17c8c3-c7b8-4327-bad6-7ae8d4a160fa",
+        "position": "1900,525.2"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2475.2",
+    "gridPadding": "0,0.200000000000045"
+  },
+  "active": true,
+  "parameters": [],
+  "locals": {}
+}
