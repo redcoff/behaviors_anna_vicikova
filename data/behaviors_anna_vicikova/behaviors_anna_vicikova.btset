@@ -2,6 +2,7 @@
   "name": "behaviors_anna_vicikova",
   "trees": [
     "individual\\fire_at_closest_enemy.bt",
+    "individual\\follow_and_fire.bt",
     "individual\\go_to_position.bt",
     "individual\\stance_crouch.bt",
     "individual\\stance_prone.bt",

@@ -1,0 +1,233 @@
+{
+  "name": "Follow friend and kill enemy",
+  "id": "c6a78864-3f4a-4bcf-a40b-56476e153095",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Select action",
+      "id": "1f50dd85-a23d-48a4-b2ec-2feaf030c1a0",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Fire at the spotted enemy",
+          "id": "bd205bdb-a930-4392-a295-a2ae5a80b95b",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Fire",
+              "id": "9e47c6df-5bf6-46c5-8553-e4529c2b077c",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Fire enemy",
+                  "id": "8bfe4203-c655-4ffa-b90c-198270ed16a0",
+                  "type": "fire",
+                  "decorators": [
+                    {
+                      "id": "10f442d3-2c84-44e6-ae81-e8a4b4887d08",
+                      "type": "scriptAction",
+                      "name": "Aim",
+                      "script": [
+                        "return self:ReqHeadingAimAtEntity(loc.enemy)"
+                      ]
+                    }
+                  ],
+                  "rounds": [
+                    "10"
+                  ],
+                  "forced": false
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "827e2cb2-c2cd-42c0-96d1-346867036858",
+                  "type": "scriptCondition",
+                  "name": "Have Ammo",
+                  "script": [
+                    "return self:GetCurrentMagazine().rounds > 1"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Reload",
+              "id": "6c585540-088f-40c8-872f-1a5db330ee24",
+              "type": "reloadWeapon"
+            }
+          ],
+          "decorators": [
+            {
+              "id": "926f5c8d-29b6-46f0-9b90-c4ec3e12aa0a",
+              "type": "scriptCondition",
+              "name": "Is enemy spotted",
+              "script": [
+                "return loc.enemy ~= nil"
+              ]
+            },
+            {
+              "id": "c055a3ca-9b51-40cb-a79d-f0e879f8493f",
+              "type": "scriptCondition",
+              "name": "Is enemy alive",
+              "script": [
+                "return loc.enemy:IsAlive()"
+              ]
+            },
+            {
+              "id": "6dccdac5-6f27-4fc4-8827-3fe343c02e67",
+              "type": "scriptCondition",
+              "name": "Is enemy visible",
+              "script": [
+                "return self:CanSeeEnemy()"
+              ]
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Spot Enemy",
+          "id": "96009bc3-0da0-4676-bc60-f82e96d12442",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "ba51b71a-11d7-4da0-a1e2-85932de32367",
+              "type": "scriptCondition",
+              "name": "Is enemy visible",
+              "script": [
+                "return self:CanSeeEnemy()"
+              ]
+            }
+          ],
+          "script": [
+            "local enemies = self:GetVisibleEnemies()",
+            "for i=1, #enemies do",
+            "    if enemies[i]:IsAlive() then",
+            "        loc.enemy = enemies[i]",
+            "        break",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "Follow Friend With Offset",
+          "id": "cc9394e9-1fc5-4c9f-b162-016f52839fc7",
+          "type": "followEntityWithOffset",
+          "decorators": [
+            {
+              "id": "92e71bee-5d29-4f87-ba98-6259219ea054",
+              "type": "scriptCondition",
+              "name": "Has Friend",
+              "script": [
+                "return loc.friend ~= nil"
+              ]
+            }
+          ],
+          "entity": [
+            "return loc.friend"
+          ],
+          "offset": [
+            "return loc.offset"
+          ]
+        },
+        {
+          "name": "Find Friend",
+          "id": "a556954f-79c9-4030-a9f2-01dd062367c3",
+          "type": "scriptAction",
+          "script": [
+            "for i, entity in ipairs(",
+            "    GetEntitiesInArea(",
+            "        Circle(",
+            "            self:GetPosition(), ",
+            "            20",
+            "        )",
+            "    )",
+            ") ",
+            "do",
+            "    loc.friend = entity",
+            "    break",
+            "end"
+          ]
+        },
+        {
+          "name": "<unnamed>",
+          "id": "22d75d67-3904-409e-ad86-94621b0b79f5",
+          "type": "wait",
+          "time": [
+            "0.5"
+          ]
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "Debug Log",
+      "id": "c45abf74-75b7-4271-874c-bad02393f569",
+      "type": "scriptAction",
+      "script": [
+        "if loc.friend ~= nil then",
+        "    DebugLog(\"I have my friend! I'm following him.\")",
+        "else",
+        "    DebugLog(\"I don't have any friends. :(\")",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "c6a78864-3f4a-4bcf-a40b-56476e153095",
+        "position": "1437.5,453.1",
+        "height": 66.400000000000034
+      },
+      {
+        "id": "1f50dd85-a23d-48a4-b2ec-2feaf030c1a0",
+        "position": "1437.5,565.6",
+        "width": 208.60000000000014
+      },
+      {
+        "id": "bd205bdb-a930-4392-a295-a2ae5a80b95b",
+        "position": "1450,678.1"
+      },
+      {
+        "id": "9e47c6df-5bf6-46c5-8553-e4529c2b077c",
+        "position": "1475,928.1"
+      },
+      {
+        "id": "8bfe4203-c655-4ffa-b90c-198270ed16a0",
+        "position": "1475,1078.1"
+      },
+      {
+        "id": "6c585540-088f-40c8-872f-1a5db330ee24",
+        "position": "1637.5,978.1"
+      },
+      {
+        "id": "96009bc3-0da0-4676-bc60-f82e96d12442",
+        "position": "1700,728.1"
+      },
+      {
+        "id": "cc9394e9-1fc5-4c9f-b162-016f52839fc7",
+        "position": "1875,728.1"
+      },
+      {
+        "id": "a556954f-79c9-4030-a9f2-01dd062367c3",
+        "position": "2087.5,778.1"
+      },
+      {
+        "id": "22d75d67-3904-409e-ad86-94621b0b79f5",
+        "position": "2275,778.1"
+      },
+      {
+        "id": "c45abf74-75b7-4271-874c-bad02393f569",
+        "position": "1787.5,565.6"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2765.6",
+    "gridPadding": "0,3.09999999999997"
+  },
+  "parameters": [],
+  "locals": {
+    "enemy": "return nil",
+    "friend": "return nil",
+    "offset": "return Vec3(5, 5, 5)"
+  }
+}
