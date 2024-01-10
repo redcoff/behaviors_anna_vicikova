@@ -117,34 +117,23 @@
               "type": "scriptCondition",
               "name": "Has Friend",
               "script": [
-                "return loc.friend ~= nil"
+                "return arg.unitToFollow ~= nil"
               ]
             }
           ],
           "entity": [
-            "return loc.friend"
+            "return arg.unitToFollow"
           ],
           "offset": [
             "return loc.offset"
           ]
         },
         {
-          "name": "Find Friend",
-          "id": "a556954f-79c9-4030-a9f2-01dd062367c3",
-          "type": "scriptAction",
-          "script": [
-            "for i, entity in ipairs(",
-            "    GetEntitiesInArea(",
-            "        Circle(",
-            "            self:GetPosition(), ",
-            "            20",
-            "        )",
-            "    )",
-            ") ",
-            "do",
-            "    loc.friend = entity",
-            "    break",
-            "end"
+          "name": "<unnamed>",
+          "id": "15421c26-096a-4cf9-9704-61e7f4287212",
+          "type": "headLookAtPosition",
+          "position": [
+            "loc.friend:GetPosition()"
           ]
         },
         {
@@ -163,7 +152,7 @@
       "id": "c45abf74-75b7-4271-874c-bad02393f569",
       "type": "scriptAction",
       "script": [
-        "if loc.friend ~= nil then",
+        "if arg.unitToFollow ~= nil then",
         "    DebugLog(\"I have my friend! I'm following him.\")",
         "else",
         "    DebugLog(\"I don't have any friends. :(\")",
@@ -171,12 +160,19 @@
       ]
     }
   ],
+  "decorators": [
+    {
+      "id": "90a7b3e8-1faf-424a-8c1c-74ab148dea85",
+      "type": "loopForever",
+      "name": "<unnamed>"
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
         "id": "c6a78864-3f4a-4bcf-a40b-56476e153095",
-        "position": "1437.5,453.1",
-        "height": 66.400000000000034
+        "position": "1437.5,328.1",
+        "height": 124.80000000000004
       },
       {
         "id": "1f50dd85-a23d-48a4-b2ec-2feaf030c1a0",
@@ -208,8 +204,8 @@
         "position": "1875,728.1"
       },
       {
-        "id": "a556954f-79c9-4030-a9f2-01dd062367c3",
-        "position": "2087.5,778.1"
+        "id": "15421c26-096a-4cf9-9704-61e7f4287212",
+        "position": "2100,778.1"
       },
       {
         "id": "22d75d67-3904-409e-ad86-94621b0b79f5",
@@ -224,7 +220,12 @@
     "canvasSize": "3840,2765.6",
     "gridPadding": "0,3.09999999999997"
   },
-  "parameters": [],
+  "parameters": [
+    {
+      "name": "unitToFollow",
+      "isOptional": false
+    }
+  ],
   "locals": {
     "enemy": "return nil",
     "friend": "return nil",

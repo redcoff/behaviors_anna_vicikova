@@ -1,0 +1,323 @@
+{
+  "name": "<unnamed>",
+  "id": "1e5c5d32-6df2-4d59-a8e8-fcaadabc00c6",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Shoot or Cover",
+      "id": "7d17258c-3f9b-420e-9b5d-f2f9dc74f4ef",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Shoot or Move to shoot position",
+          "id": "b5c492c9-6451-4992-b1fa-32d5f25823d7",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Shoot",
+              "id": "788f3b8e-4df7-4252-a368-88374a1a70b8",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Fire enemy",
+                  "id": "95f5518e-9e54-44d6-b927-07ac03da5879",
+                  "type": "fire",
+                  "decorators": [
+                    {
+                      "id": "96e3426c-252e-4c1c-a0ba-bb66ede63dc9",
+                      "type": "scriptAction",
+                      "name": "Aim",
+                      "script": [
+                        "return self:ReqHeadingAimAtEntity(loc.target)"
+                      ]
+                    },
+                    {
+                      "id": "730f891d-f2d3-44cb-8a9c-a918b34a3e56",
+                      "type": "scriptAction",
+                      "name": "Record Peek time",
+                      "script": [
+                        "loc.peekTimeCurrent = GetSimulationTime() - loc.peekTimeStart"
+                      ]
+                    }
+                  ],
+                  "rounds": [
+                    "3"
+                  ],
+                  "forced": false
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "3eaf69f1-5473-4267-883d-52628242dd27",
+                  "type": "scriptCondition",
+                  "name": "Have Ammo",
+                  "script": [
+                    "return self:GetCurrentMagazine().rounds > 1"
+                  ]
+                },
+                {
+                  "id": "d7cd950d-2f36-4a17-8322-eb13abfd0e35",
+                  "type": "scriptCondition",
+                  "name": "Is on shoot position",
+                  "script": [
+                    "return loc.isShootPosition"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Shoot state",
+              "id": "649d1a39-c06b-4560-a998-b1b094224448",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Set Shoot stance",
+                  "id": "14bc4fdd-9241-4087-9b44-c594f1e7bd84",
+                  "type": "setStance",
+                  "stance": [
+                    "return arg.shootStance"
+                  ]
+                },
+                {
+                  "name": "Move to Shoot position",
+                  "id": "b126399a-41a3-4bb3-999d-4edc0f668f54",
+                  "type": "move",
+                  "position": [
+                    "return arg.shootPosition"
+                  ]
+                },
+                {
+                  "name": "Set Shoot state",
+                  "id": "9ceb07c8-1d17-46a7-a887-80836fb86d53",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.isShootPosition = true",
+                    "loc.peekTimeStart = GetSimulationTime()"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "bfaa6782-2ff7-4e70-a934-8d154620d3b3",
+                  "type": "scriptCondition",
+                  "name": "Have Ammo",
+                  "script": [
+                    "return self:GetCurrentMagazine().rounds > 1"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Reload",
+              "id": "1907392c-a1fa-410a-932d-7f7f0a3f746b",
+              "type": "reloadWeapon"
+            }
+          ],
+          "decorators": [
+            {
+              "id": "2e671fe4-7e1f-44c1-a44b-83feeda47a59",
+              "type": "scriptCondition",
+              "name": "Is not long peek",
+              "script": [
+                "if loc.peekTimeCurrent ~= nil then",
+                "    return loc.peekTimeCurrent < 5",
+                "else",
+                "    return true",
+                "end"
+              ]
+            },
+            {
+              "id": "b02ffd52-f713-4ab6-9ae9-c07c533cce36",
+              "type": "scriptCondition",
+              "name": "Is enemy nearby",
+              "script": [
+                "return loc.target ~= nil"
+              ]
+            },
+            {
+              "id": "fcbc4313-2faf-494e-9a3f-9efe4d304256",
+              "type": "scriptCondition",
+              "name": "Is enemy alive",
+              "script": [
+                "return loc.target:IsAlive()"
+              ]
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Cover",
+          "id": "14bb3e37-c706-4cef-89b3-9da0c533c309",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Set Cover stance",
+              "id": "7874291b-4d61-4012-817d-8c80fbeb08c1",
+              "type": "setStance",
+              "stance": [
+                "return arg.coverStance"
+              ]
+            },
+            {
+              "name": "Move to Cover position",
+              "id": "593d170f-9632-48c1-afb3-3559936d0c83",
+              "type": "move",
+              "position": [
+                "return arg.coverPosition"
+              ]
+            },
+            {
+              "name": "Reset Peek time",
+              "id": "e54fa89d-aca3-4d4d-890e-cb7923b2c354",
+              "type": "scriptAction",
+              "decorators": [
+                {
+                  "id": "93d49628-35b3-480d-bca2-776ec14853a0",
+                  "type": "scriptAction",
+                  "name": "Reset Enemy Target",
+                  "script": [
+                    "loc.target = nil"
+                  ]
+                },
+                {
+                  "id": "33beddb0-b96a-4bbe-94f3-13daff0aebff",
+                  "type": "scriptAction",
+                  "name": "Reset Shoot state",
+                  "script": [
+                    "loc.isShootPosition = false"
+                  ]
+                }
+              ],
+              "script": [
+                "loc.peekTimeStart = nil",
+                "loc.peekTimeCurrent = nil"
+              ]
+            }
+          ]
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "Find enemy",
+      "id": "85ac92ed-e4fd-4fd5-97dd-86b9781320ea",
+      "type": "scriptAction",
+      "script": [
+        "for i, entity in ipairs(",
+        "    GetEntitiesInArea(",
+        "        Circle(",
+        "            self:GetPosition(), ",
+        "            300",
+        "        ), ",
+        "        {",
+        "            enemyOf = self",
+        "        }",
+        "    )",
+        ") ",
+        "do",
+        "    if entity:IsAlive() then",
+        "        loc.target = entity",
+        "        break",
+        "    end",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "1e5c5d32-6df2-4d59-a8e8-fcaadabc00c6",
+        "position": "1525,185.111111111111"
+      },
+      {
+        "id": "7d17258c-3f9b-420e-9b5d-f2f9dc74f4ef",
+        "position": "1525,297.611111111111",
+        "width": 167.00000000000011
+      },
+      {
+        "id": "b5c492c9-6451-4992-b1fa-32d5f25823d7",
+        "position": "1487.5,422.611111111111"
+      },
+      {
+        "id": "788f3b8e-4df7-4252-a368-88374a1a70b8",
+        "position": "1537.5,685.111111111111"
+      },
+      {
+        "id": "95f5518e-9e54-44d6-b927-07ac03da5879",
+        "position": "1537.5,922.611111111112"
+      },
+      {
+        "id": "649d1a39-c06b-4560-a998-b1b094224448",
+        "position": "1700,735.111111111111"
+      },
+      {
+        "id": "14bc4fdd-9241-4087-9b44-c594f1e7bd84",
+        "position": "1700,922.611111111112"
+      },
+      {
+        "id": "b126399a-41a3-4bb3-999d-4edc0f668f54",
+        "position": "1850,922.611111111111"
+      },
+      {
+        "id": "9ceb07c8-1d17-46a7-a887-80836fb86d53",
+        "position": "2037.5,922.611111111111"
+      },
+      {
+        "id": "1907392c-a1fa-410a-932d-7f7f0a3f746b",
+        "position": "1887.5,785.111111111111"
+      },
+      {
+        "id": "14bb3e37-c706-4cef-89b3-9da0c533c309",
+        "position": "2200,572.611111111111"
+      },
+      {
+        "id": "7874291b-4d61-4012-817d-8c80fbeb08c1",
+        "position": "2187.5,735.111111111111",
+        "width": 175.80000000000064
+      },
+      {
+        "id": "593d170f-9632-48c1-afb3-3559936d0c83",
+        "position": "2375,735.111111111111"
+      },
+      {
+        "id": "e54fa89d-aca3-4d4d-890e-cb7923b2c354",
+        "position": "2575,735.111111111111"
+      },
+      {
+        "id": "85ac92ed-e4fd-4fd5-97dd-86b9781320ea",
+        "position": "1737.5,297.611111111111"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2471.31111111111",
+    "gridPadding": "0,10.1111111111114"
+  },
+  "parameters": [
+    {
+      "name": "shootStance",
+      "isOptional": true,
+      "defaultValue": "Stance.Standing"
+    },
+    {
+      "name": "shootPosition",
+      "isOptional": true,
+      "defaultValue": "Vec3(999978.30587881, 999824.269135309, 558.611206054688 )"
+    },
+    {
+      "name": "coverStance",
+      "isOptional": true,
+      "defaultValue": "Stance.Crouched"
+    },
+    {
+      "name": "coverPosition",
+      "isOptional": true,
+      "defaultValue": "Vec3(999980.0625, 999826.1875, 558.533325195313 )"
+    }
+  ],
+  "locals": {
+    "target": "return nil",
+    "peekTimeStart": "return nil",
+    "peekTimeCurrent": "return nil",
+    "isShootPosition": "return false"
+  }
+}

@@ -4,6 +4,7 @@
     "individual\\fire_at_closest_enemy.bt",
     "individual\\follow_and_fire.bt",
     "individual\\go_to_position.bt",
+    "individual\\shoot_from_cover.bt",
     "individual\\stance_crouch.bt",
     "individual\\stance_prone.bt",
     "Thesesus\\find_minotaurus.bt",
