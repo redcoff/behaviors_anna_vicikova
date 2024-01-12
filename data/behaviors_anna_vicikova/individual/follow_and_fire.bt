@@ -133,7 +133,7 @@
           "id": "15421c26-096a-4cf9-9704-61e7f4287212",
           "type": "headLookAtPosition",
           "position": [
-            "loc.friend:GetPosition()"
+            "arg.unitToFollow:GetPosition()"
           ]
         },
         {
@@ -223,7 +223,8 @@
   "parameters": [
     {
       "name": "unitToFollow",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
   "locals": {
