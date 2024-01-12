@@ -1,6 +1,7 @@
 {
   "name": "behaviors_anna_vicikova",
   "trees": [
+    "group\\group_move.bt",
     "individual\\fire_at_closest_enemy.bt",
     "individual\\follow_and_fire.bt",
     "individual\\go_to_position.bt",
@@ -10,7 +11,11 @@
     "Thesesus\\find_minotaurus.bt",
     "my_behavior.bt"
   ],
-  "initScripts": [],
+  "initScripts": [
+    "group\\Team_anna.class.lua",
+    "individual\\Individual_anna.class.lua",
+    "classes.lua"
+  ],
   "parameters": {},
   "capabilities": {},
   "dynamicTargets": []

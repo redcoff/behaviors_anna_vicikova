@@ -1,0 +1,51 @@
+{
+  "name": "<unnamed>",
+  "id": "edf5fa80-057f-463d-b920-1e113fc0eb68",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Send message",
+      "id": "9a20867e-f246-4775-a892-972beb67dcf7",
+      "type": "scriptAction",
+      "script": [
+        "for i = 0, self:GetEntityCount() - 1",
+        "do ",
+        "    self:SendMessage(",
+        "        self:GetEntity(i), ",
+        "        \"NewOrder\", ",
+        "        {",
+        "            orderName = \"Crouch\"",
+        "        }",
+        "    )",
+        "end"
+      ]
+    },
+    {
+      "name": "Wait Forever",
+      "id": "f4e22949-006b-487e-9825-1fc48d789250",
+      "type": "waitForever"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "edf5fa80-057f-463d-b920-1e113fc0eb68",
+        "position": "2200,975"
+      },
+      {
+        "id": "9a20867e-f246-4775-a892-972beb67dcf7",
+        "position": "2100,1075"
+      },
+      {
+        "id": "f4e22949-006b-487e-9825-1fc48d789250",
+        "position": "2287.5,1075"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [],
+  "locals": {
+    "newOrderData": "return nil"
+  }
+}
